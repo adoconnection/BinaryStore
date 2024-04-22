@@ -1,9 +1,14 @@
 # BinaryStore
 NET binary serializer optimized for random reads/writes. 
+Database replacement for telementry/sensor data or logs
+
 * Best works for lists of fixed length objects 
-* Instant random reads and writes for any position in list
+* Instant individual records reads and writes for any position in list
+* Single record corruption does not affect others
 * 20x faster writes vs NewtonsoftJson
 * 8x faster reads vs NewtonsoftJson
+* 
+
   
 
 ## NuGet
