@@ -66,3 +66,24 @@ for (int i = 0; i < binaryStore.GetRecordsCount(); i++)
     Console.WriteLine(i + " - " + binaryStore.Read(i));
 }
 ```
+
+## External Lock
+
+```cs
+private static object LockObject = new object();
+
+//...
+
+BinaryStore<Person> binaryStore = new BinaryStore<Person>(stream, LockObject);
+```
+
+## Options
+
+```cs
+BinaryStore<Person> binaryStore = new BinaryStore<Person>(stream, builder =>
+{
+    builder.BinaryAttributePropertiesOnly = true; // serialize only properties with [BinaryStoreRecord] attribute
+    builder.SeekToBeginningAtStartup = true; // goto stream 0 at stratup 
+    builder.Serializers.Add(new BinaryStoreByteArraySerializer()); // add your own type serializers
+});
+```
