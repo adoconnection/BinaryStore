@@ -1,5 +1,5 @@
 # BinaryStore
-NET binary serializer optimized for random reads/writes. 
+NET binary serializer optimized for random reads/writes. <br>
 Database replacement for telementry/sensor data or logs
 
 * Best works for lists of fixed length objects 
