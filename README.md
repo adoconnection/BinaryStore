@@ -4,7 +4,7 @@ Database replacement for telementry/sensor data or logs.
 
 * Best works for lists of fixed length objects 
 * Instant reads and writes for any position in list
-  Individual records corruption does not affect others
+* Individual records corruption does not affect others
 * 20x faster writes vs NewtonsoftJson
 * 8x faster reads vs NewtonsoftJson
 
