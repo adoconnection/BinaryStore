@@ -93,8 +93,8 @@ public class WriteTests
         var source = new Person()
         {
             Id = 100,
-            LastName = "Last Name XXX",
-            FirstName = "First Name XXX",
+            LastName = "New Last",
+            FirstName = "New First",
             Birthday = new DateTime(2000, 01, 02, 12, 0, 0)
         };
 
@@ -159,7 +159,7 @@ public class WriteTests
         Assert.AreEqual(persons[0].FirstName, binaryStore.Read(0).FirstName);
         Assert.AreEqual(persons[0].Birthday, binaryStore.Read(0).Birthday);
 
-        Assert.AreEqual(null, binaryStore.Read(0));
+        Assert.AreEqual(null, binaryStore.Read(1));
 
         Assert.AreEqual(persons[2].Id, binaryStore.Read(2).Id);
         Assert.AreEqual(persons[2].LastName, binaryStore.Read(2).LastName);
