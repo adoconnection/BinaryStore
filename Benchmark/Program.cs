@@ -8,10 +8,10 @@ namespace Benchmark
     {
         public int Id { get; set; }
 
-        [BinaryStoreRecordLength(30)]
+        [BinaryStoreRecordLength(40)]
         public string FirstName { get; set; }
 
-        [BinaryStoreRecordLength(30)]
+        [BinaryStoreRecordLength(40)]
         public string LastName { get; set; }
         public DateTime Birthday { get; set; }
     }
@@ -39,19 +39,17 @@ namespace Benchmark
 
         private static void Write(IList<Person> persons)
         {
-            using Stream stream1 = File.Open("file1.bin", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
+            using Stream stream1 = File.Open("file1.binxx", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
             using Stream stream2 = File.Open("file2.bin", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
 
             DateTime dateTime11 = DateTime.Now;
 
             string serializeObject = JsonConvert.SerializeObject(persons);
-            using StreamWriter writer = new StreamWriter(stream1);
-            writer.Write(serializeObject);
+            File.WriteAllText("file1.bin", serializeObject);
 
             DateTime dateTime12 = DateTime.Now;
 
             Console.WriteLine("JsonConvert - " + (dateTime12 - dateTime11).Milliseconds + " ms");
-
 
             DateTime dateTime1 = DateTime.Now;
 

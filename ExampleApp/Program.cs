@@ -1,20 +1,8 @@
 ﻿using BinaryStore;
-using BinaryStore.Attributes;
+using BinaryStore.Serializers;
 
 namespace ExampleApp
 {
-    public record Person
-    {
-        public int Id { get; set; }
-
-        [BinaryStoreRecordLength(30)]
-        public string FirstName { get; set; }
-
-        [BinaryStoreRecordLength(30)]
-        public string LastName { get; set; }
-        public DateTime Birthday { get; set; }
-    }
-
     internal class Program
     {
         static void Main(string[] args)
@@ -26,7 +14,12 @@ namespace ExampleApp
 
             using Stream stream = File.Open("Persons.bin", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
 
-            BinaryStore<Person> binaryStore = new BinaryStore<Person>(stream);
+            BinaryStore<Person> binaryStore = new BinaryStore<Person>(stream, builder =>
+            {
+                builder.BinaryAttributePropertiesOnly = true;
+                builder.SeekToBeginningAtStartup = true;
+                builder.Serializers.Add(new BinaryStoreByteArraySerializer());
+            });
 
             binaryStore.Append(new Person()
             {

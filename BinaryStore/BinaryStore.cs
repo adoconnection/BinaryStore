@@ -47,7 +47,7 @@
 
                 if (!value)
                 {
-                    stream.Seek(this.recordLength, SeekOrigin.Current);
+                    stream.Seek(this.recordLength - 1, SeekOrigin.Current);
                     return default(T);
                 }
 
