@@ -12,4 +12,7 @@ public record Person
     [BinaryStoreRecordLength(30)]
     public string LastName { get; set; }
     public DateTime Birthday { get; set; }
+
+    [BinaryStoreRecordIgnore]
+    public string Code { get; set; }
 }
