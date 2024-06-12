@@ -22,7 +22,7 @@ namespace Benchmark
         {
             IList<Person> persons = new List<Person>();
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 50000; i++)
             {
                 persons.Add(new Person()
                 {
@@ -39,22 +39,25 @@ namespace Benchmark
 
         private static void Write(IList<Person> persons)
         {
-            using Stream stream1 = File.Open("file1.binxx", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
-            using Stream stream2 = File.Open("file2.bin", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
 
             DateTime dateTime11 = DateTime.Now;
 
             string serializeObject = JsonConvert.SerializeObject(persons);
-            File.WriteAllText("file1.bin", serializeObject);
+            File.WriteAllText("newtonsoft.json", serializeObject);
 
             DateTime dateTime12 = DateTime.Now;
 
-            Console.WriteLine("JsonConvert - " + (dateTime12 - dateTime11).Milliseconds + " ms");
+            Console.WriteLine("Write JsonConvert - " + (dateTime12 - dateTime11).Milliseconds + " ms");
+
 
             DateTime dateTime1 = DateTime.Now;
 
+            using Stream stream2 = File.Open("binarystore.bin", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
 
-            BinaryStore<Person> binaryStore = new BinaryStore<Person>(stream2);
+            BinaryStore<Person> binaryStore = new BinaryStore<Person>(stream2, options =>
+            {
+                options.FlushOnWrite = false;
+            });
 
             for (var index = 0; index < persons.Count; index++)
             {
@@ -64,27 +67,27 @@ namespace Benchmark
 
             DateTime dateTime2 = DateTime.Now;
 
-            Console.WriteLine("BinaryStore - " + (dateTime2 - dateTime1).Milliseconds + " ms");
+            Console.WriteLine("Write BinaryStore - " + (dateTime2 - dateTime1).Milliseconds + " ms");
 
-            stream1.Flush();
             stream2.Flush();
+            stream2.Dispose();
+
         }
         private static void Read()
         {
-           
-           
             DateTime dateTime11 = DateTime.Now;
 
-            IList<Person> persons1 = JsonConvert.DeserializeObject<List<Person>>(File.ReadAllText("file1.bin"));
+            IList<Person> persons1 = JsonConvert.DeserializeObject<List<Person>>(File.ReadAllText("newtonsoft.json"));
 
             DateTime dateTime12 = DateTime.Now;
 
-            Console.WriteLine("JsonConvert - " + (dateTime12 - dateTime11).Milliseconds + " ms");
+            Console.WriteLine(persons1.Count);
+            Console.WriteLine("Read JsonConvert - " + (dateTime12 - dateTime11).Milliseconds + " ms");
 
 
             DateTime dateTime1 = DateTime.Now;
 
-            using Stream stream2 = File.Open("file2.bin", FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+            using Stream stream2 = File.Open("binarystore.bin", FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
             BinaryStore<Person> binaryStore = new BinaryStore<Person>(stream2);
 
             IList<Person> persons2 = new List<Person>();
@@ -96,7 +99,8 @@ namespace Benchmark
 
             DateTime dateTime2 = DateTime.Now;
 
-            Console.WriteLine("BinaryStore - " + (dateTime2 - dateTime1).Milliseconds + " ms");
+            Console.WriteLine(persons2.Count);
+            Console.WriteLine("Read BinaryStore - " + (dateTime2 - dateTime1).Milliseconds + " ms");
 
         }
     }

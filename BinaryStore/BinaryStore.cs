@@ -36,7 +36,7 @@
             this.recordLength = this.properties.Sum(p => p.Length) + 1;
         }
 
-        public T Read(int recordId)
+        public T Read(long recordId)
         {
             lock (this.options.LockObject)
             {
@@ -62,7 +62,7 @@
             }
         }
 
-        public void Write(T entry, int recordId)
+        public void Write(T entry, long recordId)
         {
             lock (this.options.LockObject)
             {
@@ -82,19 +82,25 @@
                     property.Serialize(stream, entry);
                 }
 
-                stream.Flush();
+                if (this.options.FlushOnWrite)
+                {
+                    stream.Flush();
+                }
             }
         }
 
         public void Append(T entry)
         {
-            long recordId = this.GetRecordsCount();
-            this.Write(entry, (int)recordId);
+            lock (this.options.LockObject)
+            {
+                long recordId = this.GetRecordsCount();
+                this.Write(entry, recordId);
+            }
         }
 
-        public int GetRecordsCount()
+        public long GetRecordsCount()
         {
-            return (int)(this.stream.Length / this.recordLength);
+            return (this.stream.Length / this.recordLength);
         }
 
         private void SeekToRecord(long recordId)

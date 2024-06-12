@@ -8,6 +8,7 @@ public class BinaryStoreOptions
     public IList<string> TargetProperties { get; set; }
     public bool BinaryAttributePropertiesOnly { get; set; }
     public bool SeekToBeginningAtStartup { get; set; } = true;
+    public bool FlushOnWrite { get; set; } = true;
 
     public IList<IBinaryStoreSerializer> Serializers { get; set; } = new List<IBinaryStoreSerializer>()
     {
