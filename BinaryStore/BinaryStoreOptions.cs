@@ -11,6 +11,8 @@ public class BinaryStoreOptions
 
     public IList<IBinaryStoreSerializer> Serializers { get; set; } = new List<IBinaryStoreSerializer>()
     {
+        new BinaryStoreBoolSerializer(),
+        new BinaryStoreByteSerializer(),
         new BinaryStoreIntegerSerializer(),
         new BinaryStoreLongSerializer(),
         new BinaryStoreDoubleSerializer(),
@@ -19,7 +21,7 @@ public class BinaryStoreOptions
         new BinaryStoreGuidSerializer(),
         new BinaryStoreStringSerializer(),
 
-        new BinaryStoreByteArraySerializer()
+        new BinaryStoreByteArraySerializer(),
     };
 
 
